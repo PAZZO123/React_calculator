@@ -29,7 +29,7 @@ console.log(previous , prevOp , value)
   }
   prevOp=""
  }
- 
+ //returning the output Element
   return (
     <div className="h-136 flex items-center justify-center bg-[#7A7B88] w-100">
       

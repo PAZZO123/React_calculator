@@ -1,36 +1,72 @@
-import { useState } from 'react'
+import { useState } from 'react';
 export default function Calculator() {
-  const [value, setValue]=useState("")
+  const [value, setValue]=useState("0")
   const [operator, setOperator]=useState("")
   const [previous, setPrevious]=useState("")
  
-  function getValue(num){
-    setValue(prev=>prev+num)
-  }
+  // function getValue(num){
+  //   value ==="0"?setValue(num):setValue(prev=>prev+num)
+  // }
 
+  function getValue(num) {
+  // last action was operator, start new number
+  if (value === previous) {
+    setValue(num.toString());
+  } else if (value === "0" && num !== ".") {
+    setValue(num.toString());
+  } else {
+    setValue(prev => prev + num.toString());
+  }
+}
 
  function chooseOp(op){
-if (value=== "") return;
- setPrevious(value)
+if (previous!=="" && operator !=="" && value !==""){
+  compute()
+  console.log('computing....')
+} else{
+  setPrevious(value)
+}
+ 
   setOperator(op)
-  setValue("")
+  //setValue("")
   
-console.log(previous , operator , value)
+//console.log(previous , operator , value)
 
  }
  // Computing function
  function compute(){
-  if(operator!==""){
-   setCurrent(value)
- if(operator==="+"){
-  const result=+previous+(+currentnumber)
-  setValue(result)
-  console.log(result)
- }
+  if(operator ==="" || value === "" || previous === "") return ;
+  const prev=Number(previous)
+  const current=Number(value)
+  let result=0
+  switch (operator) {
+    case "+":
+      result=prev+current
+      break;
+    case "-":
+      result=prev-current
+      break;
+    case "x":
+      result=prev*current
+      break;
+    case "/":
+      result=prev/current
+      break;
+    case "%":
+      result=prev%current
+      break;
+    default:
+      break;
   }
-setOperator("")
+  setValue(result.toString())
+  setPrevious(result.toString())
+  setOperator("")
+  setOperator("")
  }
  function clear(){
+  setValue("0")
+  setOperator("")
+  setPrevious("")
 
  }
  //returning the output Element
@@ -46,7 +82,7 @@ setOperator("")
 
         <div className="grid grid-cols-4 text-3xl bg-gray-100 font-semibold">
 
-          <button onClick={()=>setValue("0")} className="btn border-1 border-[#AAAAB2] p-7">AC</button>
+          <button onClick={clear} className="btn border-1 border-[#AAAAB2] p-7">AC</button>
           <button onClick={()=>setValue(prev=>-(+prev))} className="btn border-1 border-[#AAAAB2]">+/-</button>
           <button onClick={()=>chooseOp("%")} className="btn border-1 border-[#AAAAB2]">%</button>
           <button onClick={()=>chooseOp("/")} className="btn-op bg-[#F38636] border-1 border-[#AAAAB2] text-white">÷</button>
@@ -64,11 +100,11 @@ setOperator("")
           <button onClick={()=>getValue(1)} className="btn border-1 border-[#AAAAB2] p-7">1</button>
           <button onClick={()=>getValue(2)}  className="btn border-1 border-[#AAAAB2]">2</button>
           <button onClick={()=>getValue(3)} className="btn border-1 border-[#AAAAB2]">3</button>
-          <button onClick={()=>{chooseOp("+"); compute();}} className="btn-op bg-[#F38636] border-1 border-[#AAAAB2] text-white">+</button> 
+          <button onClick={()=>{chooseOp("+")}} className="btn-op bg-[#F38636] border-1 border-[#AAAAB2] text-white">+</button> 
 
           <button onClick={()=>getValue(0)} className="btn col-span-2 border-1 border-[#AAAAB2] p-7">0</button>
           <button onClick={()=>getValue(".")} className="btn border-1 border-[#AAAAB2]">.</button>
-          <button onClick={()=>setValue(value)} className="btn-op bg-[#F38636] border-1 border-[#AAAAB2] text-white">=</button>
+          <button onClick={compute} className="btn-op bg-[#F38636] border-1 border-[#AAAAB2] text-white">=</button>
 
         </div>
 

@@ -1,33 +1,37 @@
 import { useState } from 'react'
 export default function Calculator() {
   const [value, setValue]=useState("")
-  //const [previous, setPrevious]=useState("")
+  const [operator, setOperator]=useState("")
+  const [previous, setPrevious]=useState("")
+ 
   function getValue(num){
-    setValue(value+num)
+    setValue(prev=>prev+num)
   }
-  let previous=""
-  let prevOp=""
-  let currentnumber=""
- //let currentnumber=""
+
+
  function chooseOp(op){
- //setPrevious(previous)
- previous=value
-  prevOp=op
+if (value=== "") return;
+ setPrevious(value)
+  setOperator(op)
   setValue("")
   
-console.log(previous , prevOp , value)
+console.log(previous , operator , value)
 
  }
+ // Computing function
  function compute(){
-  if(prevOp!==""){
-    currentnumber=value
- if(prevOp==="+"){
+  if(operator!==""){
+   setCurrent(value)
+ if(operator==="+"){
   const result=+previous+(+currentnumber)
   setValue(result)
   console.log(result)
  }
   }
-  prevOp=""
+setOperator("")
+ }
+ function clear(){
+
  }
  //returning the output Element
   return (

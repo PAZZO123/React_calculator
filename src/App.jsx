@@ -1,4 +1,6 @@
-import Calculator from "./Calculator" 
+//import Calculator from "./Calculator" 
+//import Calculator from "./Calc"
+import Calculator from "./Calc"
 
 export default function App() {
   return (

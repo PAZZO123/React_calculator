@@ -1,4 +1,6 @@
 import { useState } from "react";
+import Button from "./Components/Button";
+import Symbols from "./data";
 
 export default function Calculator() {
 
@@ -6,26 +8,35 @@ export default function Calculator() {
   const [operator, setOperator] = useState("");
   const [previous, setPrevious] = useState("");
 
+  
   function getValue(num){
-    if(value === "0"){
+
+    if(value === previous){
       setValue(num.toString());
-    } else {
+    }
+    else if(value === "0" && num !== "."){
+      setValue(num.toString());
+    }
+    else{
       setValue(prev => prev + num);
     }
+
   }
 
+  
   function chooseOp(op){
 
     if(previous !== "" && operator !== "" && value !== ""){
       compute();
-    } else {
+    }
+    else{
       setPrevious(value);
     }
 
     setOperator(op);
-    setValue("0");
   }
 
+  
   function compute(){
 
     if(previous === "" || operator === "") return;
@@ -35,20 +46,30 @@ export default function Calculator() {
 
     let result = 0;
 
-    if(operator === "+"){
-      result = prev + current;
-    }
-    else if(operator === "-"){
-      result = prev - current;
-    }
-    else if(operator === "x"){
-      result = prev * current;
-    }
-    else if(operator === "/"){
-      result = prev / current;
-    }
-    else if(operator === "%"){
-      result = prev % current;
+    switch(operator){
+
+      case "+":
+        result = prev + current;
+        break;
+
+      case "-":
+        result = prev - current;
+        break;
+
+      case "X":
+        result = prev * current;
+        break;
+
+      case "÷":
+        result = prev / current;
+        break;
+
+      case "%":
+        result = prev % current;
+        break;
+
+      default:
+        return;
     }
 
     setValue(result.toString());
@@ -62,6 +83,61 @@ export default function Calculator() {
     setOperator("");
   }
 
+  function toggleSign(){
+    setValue((-(+value)).toString());
+  }
+
+  // decide handler for each button
+  function handleClick(symbol){
+
+    if(!isNaN(symbol)){
+      getValue(symbol);
+    }
+
+    else if(symbol === "."){
+      getValue(".");
+    }
+
+    else if(symbol === "AC"){
+      clear();
+    }
+
+    else if(symbol === "+/-"){
+      toggleSign();
+    }
+
+    else if(symbol === "="){
+      compute();
+    }
+
+    else{
+      chooseOp(symbol);
+    }
+
+  }
+
+  const Calc = Symbols.map((symbol,index)=>{
+
+    let extraStyle="";
+
+    if(symbol==="+"||symbol==="-"||symbol==="X"||symbol==="÷"||symbol==="="){
+      extraStyle="bg-[#F38636] text-white";
+    }
+
+    if(symbol==="0"){
+      extraStyle+=" col-span-2";
+    }
+
+    return(
+      <Button
+        key={index}
+        value={symbol}
+        handler={()=>handleClick(symbol)}
+        extra={extraStyle}
+      />
+    )
+  })
+
   return (
     <div className="h-136 flex items-center justify-center bg-[#7A7B88] w-100">
 
@@ -72,31 +148,7 @@ export default function Calculator() {
         </div>
 
         <div className="grid grid-cols-4 text-3xl bg-gray-100 font-semibold">
-
-          <button onClick={clear} className="border p-7">AC</button>
-          <button onClick={()=>setValue(prev => (-(+prev)).toString())} className="border">+/-</button>
-          <button onClick={()=>chooseOp("%")} className="border">%</button>
-          <button onClick={()=>chooseOp("/")} className="bg-orange-400 text-white border">÷</button>
-
-          <button onClick={()=>getValue(7)} className="border p-7">7</button>
-          <button onClick={()=>getValue(8)} className="border">8</button>
-          <button onClick={()=>getValue(9)} className="border">9</button>
-          <button onClick={()=>chooseOp("x")} className="bg-orange-400 text-white border">×</button>
-
-          <button onClick={()=>getValue(4)} className="border p-7">4</button>
-          <button onClick={()=>getValue(5)} className="border">5</button>
-          <button onClick={()=>getValue(6)} className="border">6</button>
-          <button onClick={()=>chooseOp("-")} className="bg-orange-400 text-white border">−</button>
-
-          <button onClick={()=>getValue(1)} className="border p-7">1</button>
-          <button onClick={()=>getValue(2)} className="border">2</button>
-          <button onClick={()=>getValue(3)} className="border">3</button>
-          <button onClick={()=>chooseOp("+")} className="bg-orange-400 text-white border">+</button>
-
-          <button onClick={()=>getValue(0)} className="col-span-2 border p-7">0</button>
-          <button onClick={()=>getValue(".")} className="border">.</button>
-          <button onClick={compute} className="bg-orange-400 text-white border">=</button>
-
+          {Calc}
         </div>
 
       </div>

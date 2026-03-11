@@ -71,6 +71,7 @@ export default function Calculator() {
       default:
         return;
     }
+    if(isNaN(result)) result="Math Error"
 
     setValue(result.toString());
     setPrevious(result.toString());
@@ -87,7 +88,6 @@ export default function Calculator() {
     setValue((-(+value)).toString());
   }
 
-  // decide handler for each button
   function handleClick(symbol){
 
     if(!isNaN(symbol)){
@@ -120,7 +120,7 @@ export default function Calculator() {
 
     let extraStyle="";
 
-    if(symbol==="+"||symbol==="-"||symbol==="X"||symbol==="÷"||symbol==="="){
+    if(symbol==="+"||symbol==="-"||symbol==="x"||symbol==="÷"||symbol==="="){
       extraStyle="bg-[#F38636] text-white";
     }
 
